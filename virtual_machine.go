@@ -47,6 +47,22 @@ func (c *Client) CreateVirtualMachine(name string, zoneUuid string, packageUuid 
 	return &vmResponse.VirtualMachine, nil
 }
 
+// ResizeVirtualMachine allows changing the package of a VM, which adjusts the capacity and cost.
+func (c *Client) ResizeVirtualMachine(uuid string, packageUUID string) (*VirtualMachine, error) {
+	vmResponse := virtualMachineResponse{}
+
+	params := map[string]interface{}{
+		"virtual_machine[package_uuid]": packageUUID,
+	}
+
+	_, err := c.DoRequest("POST", "/virtual_machines/"+uuid, params, &vmResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &vmResponse.VirtualMachine, nil
+}
+
 type virtualMachineResponse struct {
 	VirtualMachine VirtualMachine `json:"virtual_machine"`
 }

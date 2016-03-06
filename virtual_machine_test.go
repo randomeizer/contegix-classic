@@ -93,6 +93,31 @@ func (s *S) Test_CreateVirtualMachine(c *C) {
 	)
 }
 
+func (s *S) Test_ResizeVirtualMachine(c *C) {
+	testServer.Response(202, nil, vm2)
+
+	vm, err := s.client.ResizeVirtualMachine("00000000000000000000000000000001", "b20caf7301eb5d55b6a6cc25f78a1366")
+	c.Assert(err, IsNil)
+
+	_ = testServer.WaitRequest()
+
+	c.Assert(vm, DeepEquals,
+		&VirtualMachine{
+			Name:          "TestVM2",
+			UUID:          "00000000000000000000000000000001",
+			State:         "pending_deploy",
+			IPAddresses:   []string{"207.223.0.2", "207.223.0.3"},
+			TemplateName:  "CentOS-5-32",
+			TemplateUUID:  "3e0fbcadc76351709ee654dea38c51a5",
+			PackageName:   "$25.00 - 1 CPU, 256MB RAM 10GB HDD",
+			PackageUUID:   "b20caf7301eb5d55b6a6cc25f78a1366",
+			ZoneName:      "us1",
+			ZoneUUID:      "36fe43313fe05e028d32c821be0ab75f",
+			VMToolsStatus: nil,
+		},
+	)
+}
+
 var vm1 = `{
     "virtual_machine": {
       "template_name": "Ubuntu-810-32",
