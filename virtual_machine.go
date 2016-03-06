@@ -101,7 +101,7 @@ func (c *Client) SuspendVirtualMachine(uuid string) error {
 	if err != nil {
 		return err
 	} else if resp.StatusCode != 200 {
-		return fmt.Errorf("Delete of Virtual Machine with a UUID of '%v' failed: %s", uuid, resp.Status)
+		return fmt.Errorf("Suspend of Virtual Machine with a UUID of '%v' failed: %s", uuid, resp.Status)
 	}
 	return nil
 }
@@ -127,7 +127,7 @@ func (c *Client) ShutDownVirtualMachine(uuid string) error {
 	if err != nil {
 		return err
 	} else if resp.StatusCode != 200 {
-		return fmt.Errorf("Delete of Virtual Machine with a UUID of '%v' failed: %s", uuid, resp.Status)
+		return fmt.Errorf("Shut Down of Virtual Machine with a UUID of '%v' failed: %s", uuid, resp.Status)
 	}
 	return nil
 }
@@ -140,7 +140,7 @@ func (c *Client) PowerOffVirtualMachine(uuid string) error {
 	if err != nil {
 		return err
 	} else if resp.StatusCode != 200 {
-		return fmt.Errorf("Delete of Virtual Machine with a UUID of '%v' failed: %s", uuid, resp.Status)
+		return fmt.Errorf("Power Off of Virtual Machine with a UUID of '%v' failed: %s", uuid, resp.Status)
 	}
 	return nil
 }
