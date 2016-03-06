@@ -65,6 +65,18 @@ func (c *Client) ResizeVirtualMachine(uuid string, packageUUID string) (*Virtual
 	return &vmResponse.VirtualMachine, nil
 }
 
+// DeleteVirtualMachine will destroy the VM immediately and permanently.
+func (c *Client) DeleteVirtualMachine(uuid string) (bool, error) {
+	var body *string
+
+	resp, err := c.DoRequest("PUT", "/virtual_machines/"+uuid+"/destroy", nil, &body)
+	if err != nil {
+		return false, err
+	}
+
+	return resp.StatusCode == 200, nil
+}
+
 type virtualMachineResponse struct {
 	VirtualMachine VirtualMachine `json:"virtual_machine"`
 }

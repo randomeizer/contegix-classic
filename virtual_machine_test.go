@@ -118,6 +118,22 @@ func (s *S) Test_ResizeVirtualMachine(c *C) {
 	)
 }
 
+func (s *S) Test_DeleteVirtualMachine(c *C) {
+	testServer.Response(200, nil, "")
+
+	deleted, err := s.client.DeleteVirtualMachine("00000000000000000000000000000001")
+	c.Assert(err, IsNil)
+	_ = testServer.WaitRequest()
+	c.Assert(deleted, Equals, true)
+
+	testServer.Response(404, nil, "")
+
+	deleted, err = s.client.DeleteVirtualMachine("00000000000000000000000000000001")
+	c.Assert(err, IsNil)
+	_ = testServer.WaitRequest()
+	c.Assert(deleted, Equals, false)
+}
+
 var vm1 = `{
     "virtual_machine": {
       "template_name": "Ubuntu-810-32",

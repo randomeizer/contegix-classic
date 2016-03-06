@@ -62,7 +62,7 @@ func (c *Client) NewRequest(method string, endpoint string, params interface{}) 
 		body = body + "&" + sParams
 	}
 
-	if method == "GET" {
+	if IsQueryMethod(method) {
 		fullUrl += "?" + body
 		body = ""
 	}
@@ -82,12 +82,21 @@ func (c *Client) NewRequest(method string, endpoint string, params interface{}) 
 	req.Header.Add("Accept", "application/json")
 
 	// If it's a not a get, add a content-type
-	if method != "GET" {
+	if !IsQueryMethod(method) {
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
 	}
 
 	return req, nil
 
+}
+
+func IsQueryMethod(method string) bool {
+	switch method {
+	case "GET", "PUT":
+		return true
+	default:
+		return false
+	}
 }
 
 func (c *Client) DoRequest(method string, endpoint string, params interface{}, result interface{}) (*http.Response, error) {
