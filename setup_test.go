@@ -3,7 +3,7 @@ package contegixclassic
 import (
 	"testing"
 
-	"./testutil"
+	"github.com/randomeizer/contegix-classic/testutil"
 
 	. "gopkg.in/check.v1"
 )
