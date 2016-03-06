@@ -18,6 +18,7 @@ func (c *Client) ListVirtualMachines() ([]VirtualMachine, error) {
 	return virtualMachines, nil
 }
 
+// GetVirtualMachine returns the details for the specified VM
 func (c *Client) GetVirtualMachine(uuid string) (*VirtualMachine, error) {
 	vmResponse := virtualMachineResponse{}
 
@@ -29,14 +30,15 @@ func (c *Client) GetVirtualMachine(uuid string) (*VirtualMachine, error) {
 	return &vmResponse.VirtualMachine, nil
 }
 
-func (c *Client) CreateVirtualMachine(name string, zoneUuid string, packageUuid string, templateUuid string) (*VirtualMachine, error) {
+// CreateVirtualMachine will attempt to create a new VM with the specified details. The name must be unique within your account.
+func (c *Client) CreateVirtualMachine(name string, zoneUUID string, packageUUID string, templateUUID string) (*VirtualMachine, error) {
 	vmResponse := virtualMachineResponse{}
 
 	params := map[string]interface{}{
 		"virtual_machine[name]":          name,
-		"virtual_machine[zone_uuid]":     zoneUuid,
-		"virtual_machine[package_uuid]":  packageUuid,
-		"virtual_machine[template_uuid]": templateUuid,
+		"virtual_machine[zone_uuid]":     zoneUUID,
+		"virtual_machine[package_uuid]":  packageUUID,
+		"virtual_machine[template_uuid]": templateUUID,
 	}
 
 	_, err := c.DoRequest("POST", "/virtual_machines", params, &vmResponse)
