@@ -77,6 +77,54 @@ func (c *Client) DeleteVirtualMachine(uuid string) (bool, error) {
 	return resp.StatusCode == 200, nil
 }
 
+// SuspendVirtualMachine will pause the VM for later use.
+func (c *Client) SuspendVirtualMachine(uuid string) (bool, error) {
+	var body *string
+
+	resp, err := c.DoRequest("PUT", "/virtual_machines/"+uuid+"/suspend", nil, &body)
+	if err != nil {
+		return false, err
+	}
+
+	return resp.StatusCode == 200, nil
+}
+
+// StartVirtualMachine will start (or restart) the VM.
+func (c *Client) StartVirtualMachine(uuid string) (bool, error) {
+	var body *string
+
+	resp, err := c.DoRequest("PUT", "/virtual_machines/"+uuid+"/start", nil, &body)
+	if err != nil {
+		return false, err
+	}
+
+	return resp.StatusCode == 200, nil
+}
+
+// ShutDownVirtualMachine will shut down the VM immediately.
+func (c *Client) ShutDownVirtualMachine(uuid string) (bool, error) {
+	var body *string
+
+	resp, err := c.DoRequest("PUT", "/virtual_machines/"+uuid+"/shutdown", nil, &body)
+	if err != nil {
+		return false, err
+	}
+
+	return resp.StatusCode == 200, nil
+}
+
+// PowerOffVirtualMachine will shut a VM down indefinitely.
+func (c *Client) PowerOffVirtualMachine(uuid string) (bool, error) {
+	var body *string
+
+	resp, err := c.DoRequest("PUT", "/virtual_machines/"+uuid+"/power_off", nil, &body)
+	if err != nil {
+		return false, err
+	}
+
+	return resp.StatusCode == 200, nil
+}
+
 type virtualMachineResponse struct {
 	VirtualMachine VirtualMachine `json:"virtual_machine"`
 }
