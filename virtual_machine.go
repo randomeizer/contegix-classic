@@ -29,6 +29,24 @@ func (c *Client) GetVirtualMachine(uuid string) (*VirtualMachine, error) {
 	return &vmResponse.VirtualMachine, nil
 }
 
+func (c *Client) CreateVirtualMachine(name string, zoneUuid string, packageUuid string, templateUuid string) (*VirtualMachine, error) {
+	vmResponse := virtualMachineResponse{}
+
+	params := map[string]interface{}{
+		"virtual_machine[name]":          name,
+		"virtual_machine[zone_uuid]":     zoneUuid,
+		"virtual_machine[package_uuid]":  packageUuid,
+		"virtual_machine[template_uuid]": templateUuid,
+	}
+
+	_, err := c.DoRequest("POST", "/virtual_machines", params, &vmResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &vmResponse.VirtualMachine, nil
+}
+
 type virtualMachineResponse struct {
 	VirtualMachine VirtualMachine `json:"virtual_machine"`
 }
