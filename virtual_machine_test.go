@@ -71,7 +71,14 @@ func (s *S) Test_GetVirtualMachine(c *C) {
 func (s *S) Test_CreateVirtualMachine(c *C) {
 	testServer.Response(202, nil, vm2)
 
-	vm, err := s.client.CreateVirtualMachine("TestVM2", "us1", "b20caf7301eb5d55b6a6cc25f78a1366", "a78624bd5e2d5823a003d14777fcde7b")
+	details := &CreateVirtualMachine{
+		Name:         "TestVM2",
+		ZoneUUID:     "36fe43313fe05e028d32c821be0ab75f",
+		PackageUUID:  "b20caf7301eb5d55b6a6cc25f78a1366",
+		TemplateUUID: "a78624bd5e2d5823a003d14777fcde7b",
+	}
+
+	vm, err := s.client.CreateVirtualMachine(details)
 	c.Assert(err, IsNil)
 
 	_ = testServer.WaitRequest()
@@ -93,10 +100,14 @@ func (s *S) Test_CreateVirtualMachine(c *C) {
 	)
 }
 
-func (s *S) Test_ResizeVirtualMachine(c *C) {
-	testServer.Response(202, nil, vm2)
+func (s *S) Test_UpdateVirtualMachine(c *C) {
+	testServer.Response(200, nil, vm2)
 
-	vm, err := s.client.ResizeVirtualMachine("00000000000000000000000000000001", "b20caf7301eb5d55b6a6cc25f78a1366")
+	details := &UpdateVirtualMachine{
+		PackageUUID: "b20caf7301eb5d55b6a6cc25f78a1366",
+	}
+
+	vm, err := s.client.UpdateVirtualMachine("00000000000000000000000000000001", details)
 	c.Assert(err, IsNil)
 
 	_ = testServer.WaitRequest()
@@ -121,33 +132,29 @@ func (s *S) Test_ResizeVirtualMachine(c *C) {
 func (s *S) Test_DeleteVirtualMachine(c *C) {
 	testServer.Response(200, nil, "")
 
-	deleted, err := s.client.DeleteVirtualMachine("00000000000000000000000000000001")
+	err := s.client.DeleteVirtualMachine("00000000000000000000000000000001")
 	c.Assert(err, IsNil)
 	_ = testServer.WaitRequest()
-	c.Assert(deleted, Equals, true)
 
 	testServer.Response(404, nil, "")
 
-	deleted, err = s.client.DeleteVirtualMachine("00000000000000000000000000000001")
-	c.Assert(err, IsNil)
+	err = s.client.DeleteVirtualMachine("00000000000000000000000000000001")
+	c.Assert(err, NotNil)
 	_ = testServer.WaitRequest()
-	c.Assert(deleted, Equals, false)
 }
 
 func (s *S) Test_SuspendVirtualMachine(c *C) {
 	testServer.Response(200, nil, "")
 
-	deleted, err := s.client.SuspendVirtualMachine("00000000000000000000000000000001")
+	err := s.client.SuspendVirtualMachine("00000000000000000000000000000001")
 	c.Assert(err, IsNil)
 	_ = testServer.WaitRequest()
-	c.Assert(deleted, Equals, true)
 
 	testServer.Response(404, nil, "")
 
-	deleted, err = s.client.SuspendVirtualMachine("00000000000000000000000000000001")
-	c.Assert(err, IsNil)
+	err = s.client.SuspendVirtualMachine("00000000000000000000000000000001")
+	c.Assert(err, NotNil)
 	_ = testServer.WaitRequest()
-	c.Assert(deleted, Equals, false)
 }
 
 var vm1 = `{
