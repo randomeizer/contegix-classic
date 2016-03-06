@@ -37,6 +37,23 @@ func (s *S) Test_ListTemplates(c *C) {
 	})
 }
 
+func (s *S) Test_GetTemplate(c *C) {
+	testServer.Response(200, nil, template1)
+
+	vm, err := s.client.GetTemplate("3e0fbcadc76351709ee654dea38c51a5")
+	c.Assert(err, IsNil)
+
+	_ = testServer.WaitRequest()
+
+	c.Assert(vm, DeepEquals,
+		&Template{
+			Name:        "CentOS-5-32",
+			UUID:        "3e0fbcadc76351709ee654dea38c51a5",
+			Description: nil,
+		},
+	)
+}
+
 var template1 = `{"template":{
     "name":"CentOS-5-32",
     "uuid":"3e0fbcadc76351709ee654dea38c51a5",
